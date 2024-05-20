@@ -1,0 +1,88 @@
+
+<div class="container">
+    <header class="d-flex justify-content-center py-3" style="background-color: #d1e7dd;">
+        {% url 'home' as url_home%}
+        {% url 'about' as url_about%}
+        {% url 'func_list' as url_func_list%}
+        {% url 'func_create' as url_func_create%}
+
+        {% if request.user.is_authenticated %}
+      <span class="navbar text"> {{user.get_username|upper}} en cours de connexion sur la boîte à idées</span> 
+      <button type="submit"> <a href="{% url 'logout'%}?next={{request.path}}">se deconnecter   ------    {{user.username}}</a>
+      {%  else %}
+      <span class="navbar text">pas connecté</span>
+      <button type="submit"> <a href={% url 'login'%}>se connecter   ------    </a>
+      {% endif %}
+      <ul class="nav nav-pills" style="margin-top: 10px;">
+        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active" aria-current="page">Home </a></li>
+            <a> {% if request.path == url_home%}page de la maison {% endif %} </a></li>
+
+        {% if request.user.is_authenticated %}
+        <li class="nav-item"><a href="{% url 'liste_ideas' %}" class="nav-link active" aria-current="page">liste des idées </a></li>
+        <li class="nav-item"><a href="{% url 'creer' %}" class="nav-link active" aria-current="page">ajouter une idée </a></li>
+        {% endif %}
+        <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link active" aria-current="page">s'enregistrer </a></li>
+        <li class="nav-item"><a href="{% url 'idees_popu' %}" class="nav-link active" aria-current="page">idees_popu </a></li>
+        {% comment %} <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">About</a></li>
+            <a>{% if request.path == url_about%}s'enregistrer{% endif %}  {% endcomment %}
+            {% comment %} class="nav link {% if request.path ==url_about%}active {% endif %}" {% endcomment %}
+        {% comment %} <li class="nav-item"><a href="{% url 'func_list' %}" 
+            class="nav-link active" aria-current="page">Fonctionalités</a></li>
+            <li class="nav-item"><a href="{% url 'func_create' %}" 
+              class="nav-link active" aria-current="page">créer</a></li> {% endcomment %}
+            {% comment %} class="nav link {% if request.path == url_home%}active {% endif %}" {% endcomment %}
+        {% comment %} <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">About</a></li> {% endcomment %}
+      </ul>
+    </header>
+  </div>
+
+  <div class="b-example-divider"></div
+
+
+
+
+
+
+
+{% comment %} <div class="container">
+    <header class="d-flex justify-content-center py-3">
+        {% url 'home' as url_home%}
+        {% url 'about' as url_about%}
+        {% url 'func_list' as url_func_list%}
+        {% url 'func_create' as url_func_create%}
+
+        {% if request.user.is_authenticated %}
+      <span class="navbar text"> {{user.get_username|upper}} en cours de connexion sur la boîte à idées</span> 
+      <button type="submit"> <a href="{% url 'logout'%}?next={{request.path}}">se deconnecter   ------    {{user.username}}</a>
+      {%  else %}
+      <span class="navbar text">pas connecté</span>
+      <button type="submit"> <a href={% url 'login'%}>se connecter   ------    </a>
+      {% endif %}
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active" aria-current="page">Home </a></li>
+            <a> {% if request.path == url_home%}page de la maison {% endif %} </a></li>
+
+        {% if request.user.is_authenticated %}
+        <li class="nav-item"><a href="{% url 'liste_ideas' %}" class="nav-link active" aria-current="page">liste des idées </a></li>
+        <li class="nav-item"><a href="{% url 'creer' %}" class="nav-link active" aria-current="page">ajouter une idée </a></li>
+        {% endif %}
+        <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link active" aria-current="page">s'enregistrer </a></li>
+        <li class="nav-item"><a href="{% url 'idees_popu' %}" class="nav-link active" aria-current="page">idees_popu </a></li> {% endcomment %}
+        {% comment %} <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">About</a></li>
+            <a>{% if request.path == url_about%}s'enregistrer{% endif %}  {% endcomment %}
+            {% comment %} class="nav link {% if request.path ==url_about%}active {% endif %}" {% endcomment %}
+        {% comment %} <li class="nav-item"><a href="{% url 'func_list' %}" 
+            class="nav-link active" aria-current="page">Fonctionalités</a></li>
+            <li class="nav-item"><a href="{% url 'func_create' %}" 
+              class="nav-link active" aria-current="page">créer</a></li> {% endcomment %}
+            {% comment %} class="nav link {% if request.path == url_home%}active {% endif %}" {% endcomment %}
+        {% comment %} <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">About</a></li> {% endcomment %}
+      </ul>
+    </header>
+  </div>
+
+  <div class="b-example-divider"></div>

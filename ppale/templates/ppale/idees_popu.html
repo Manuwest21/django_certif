@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{%block content %}
+<div class="container">
+    <p> Voici tous les votes d'idees qui ont été soumis!</p>
+    <ul>
+        {% for idi in  idee %}
+            <li>
+                <a>{{idi.formulation}} a comme score:{{idi.score}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

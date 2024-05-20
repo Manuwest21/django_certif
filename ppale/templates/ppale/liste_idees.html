@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{%block content %}
+<div class="container">
+    <p> Voici toutes les idees qui ont été soumises!</p>
+    <ul>
+        {% for idee in  ideas %}
+            <li>
+                <a href="/ppale/idee_detail/{{idee.id}}">{{idee.formulation}}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

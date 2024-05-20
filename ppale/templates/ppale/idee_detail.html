@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <h1>voici les détails de cette idée:{{id.detail}}</h1>
+  <p>Elle a été soumise par:{{id.auteur}}</p>
+
+  <a href="{% url 'vote' id.auteur %}">{{id.formulation}}voter pour cette idée</a></p>
+</div>
+{% endblock content %}
