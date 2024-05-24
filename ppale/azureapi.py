@@ -1,17 +1,51 @@
+
 import os
 from openai import AzureOpenAI
+from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 from dotenv import load_dotenv
+endpoint = os.environ["AZURE_OPENAI_ENDPOINT"]
+deployment = os.environ["CHAT_COMPLETIONS_DEPLOYMENT_NAME"]
+search_endpoint = os.environ["SEARCH_ENDPOINT"]
+search_index = os.environ["SEARCH_INDEX"]
 load_dotenv()
+token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default")
+      
 client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
+    azure_endpoint=endpoint,
+    azure_ad_token_provider=token_provider,
     api_version="2024-02-01",
-    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    )
-    
-deployment_name='django' #This will correspond to the custom name you chose for your deployment when you deployed a model. Use a gpt-35-turbo-instruct deployment. 
-    
-# Send a completion call to generate an answer
-print('Sending a test completion job')
-start_phrase = 'Write a tagline for an ice cream shop. '
-response = client.completions.create(model=deployment_name, prompt=start_phrase, max_tokens=10)
-print(start_phrase+response.choices[0].text)
+)
+      
+completion = client.chat.completions.create(
+    model=deployment,
+    messages=[
+        {
+            "role": "user",
+            "content": "Who is DRI?",
+        },
+        {
+            "role": "assistant",
+            "content": "DRI stands for Directly Responsible Individual of a service. Which service are you asking about?"
+        },
+        {
+            "role": "user",
+            "content": "Opinion mining service"
+        }
+    ],
+    extra_body={
+        "data_sources": [
+            {
+                "type": "azure_search",
+                "parameters": {
+                    "endpoint": search_endpoint,
+                    "index_name": search_index,
+                    "authentication": {
+                        "type": "system_assigned_managed_identity"
+                    }
+                }
+            }
+        ]
+    }
+)
+      
+print(completion.to_json())
