@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{%block content %}
+
+
+
+<h1>aliments : {{id_user}} >>>quels aliments voulez-vous ?>>> cochez si vous en avez et en voulez!</h1>
+<form method='POST'> 
+    {%csrf_token %}
+    {{form.as_p}}
+    <button type='submit'> valider mes aliments choisis :</button>
+
+
+{% endblock content %}
