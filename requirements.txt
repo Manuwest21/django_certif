@@ -3,3 +3,6 @@ Django==4.1.7
 sqlparse==0.4.3
 Pillow
 django-widget-tweaks
+python-dotenv
+openai==0.28.0
+azure.identity

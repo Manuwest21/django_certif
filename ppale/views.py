@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.db.models import F
-import requests
+
 import os
 # from openai import OpenAI
 from dotenv import load_dotenv

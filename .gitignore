@@ -1,9 +1,9 @@
-.env
-*.pyc
-*.pyo
-__pycache__
+# .env
+# *.pyc
+# *.pyo
+# __pycache__
 
-# Ignore les fichiers de sauvegarde
-*~
+# # Ignore les fichiers de sauvegarde
+# *~
 
-ppale/credits_openai.ipynb
+# ppale/credits_openai.ipynb
