@@ -23,10 +23,11 @@ from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 load_dotenv()
 openai.api_type="azure"
-openai.api_base="https://django.openai.azure.com/"
-openai.api_version="2024-02-01"
-openai.api_key=os.getenv("OPENAI_API_KEY")
-deployment_name="django3"
+openai.api_base="https://django1.openai.azure.com/"
+openai.api_version="2024-05-13"
+# openai.api_key=os.getenv("OPENAI_API_KEY")
+openai.api_key="f8d3069c83c74d77b71b39d9ca5fa745"
+deployment_name="django4"
 # endpoint = os.getenv["https://django.openai.azure.com/"]
 
 # deployment = os.getenv["CHAT_COMPLETIONS_DEPLOYMENT_NAME"]
