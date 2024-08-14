@@ -13,7 +13,20 @@ import django
 from django.contrib.auth import get_user_model
 django.setup()
 
+import os
+import django
+
+# Définir la variable d'environnement pour les paramètres Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
+django.setup()
+
+
+
+
 User = get_user_model()
+
+
+
 
 class AlimentsViewTests(unittest.TestCase):
 
