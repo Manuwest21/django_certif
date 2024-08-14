@@ -59,7 +59,7 @@ jobs:
               run: python manage.py migrate
 
             - name: Run specific test
-              run: python manage.py test tests.test_views
+              run: python manage.py test ppale.tests
 
             - name: Install Bandit
               run: pip install bandit
