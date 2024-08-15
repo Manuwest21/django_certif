@@ -12,7 +12,7 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}  # Nom d'utilisateur Docker Hub
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}  # Mot de passe Docker Hub
       AZURE_CONTAINER_REGISTRY: ${{ secrets.AZURE_CONTAINER_REGISTRY }}  # URL de votre ACR, e.g., myregistry.azurecr.io
-      AZURE_CONTAINER_NAME: ${{ secrets.AZURE_CONTAINER_NAME }}
+      AZURE_CONTAINER_NAME: application-django-test
       RESOURCE_GROUP: RG_Devries1
       IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/djangax  # Nom de l'image Docker Hub
 
