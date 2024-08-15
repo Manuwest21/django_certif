@@ -20,6 +20,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Print secrets for debugging
+        run: |
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}"
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}"
+          echo "AZURE_CONTAINER_REGISTRY=${{ secrets.AZURE_CONTAINER_REGISTRY }}"
+          echo "AZURE_CONTAINER_NAME=${{ secrets.AZURE_CONTAINER_NAME }}"
+          echo "RESOURCE_GROUP=${{ env.RESOURCE_GROUP }}"
+          echo "IMAGE_NAME=${{ env.IMAGE_NAME }}"
+
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
@@ -55,5 +64,5 @@ jobs:
             --memory 1 \
             --ports 8000 \
             --ip-address public \
-            
             --restart-policy Always
+
