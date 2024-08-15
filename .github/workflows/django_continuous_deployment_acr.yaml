@@ -61,4 +61,7 @@ jobs:
             --memory 1 \
             --ports 8000 \
             --ip-address public \
-            --restart-policy Always
+            --restart-policy Always \
+            --registry-username $ACR_USERNAME \
+            --registry-password $ACR_PASSWORD
+
