@@ -30,7 +30,7 @@ jobs:
           echo "IMAGE_NAME=${{ env.IMAGE_NAME }}"
 
       - name: Log in to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin || { echo "Docker login failed"; exit 1; }
 
       - name: Build Docker image
         run: docker build -t $IMAGE_NAME .
@@ -43,9 +43,14 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Remove existing Azure Container Instance if exists
+      - name: Check if Azure Container Instance exists
         run: |
-          az container delete --resource-group $RESOURCE_GROUP --name $AZURE_CONTAINER_NAME --yes || true
+          if az container show --resource-group $RESOURCE_GROUP --name $AZURE_CONTAINER_NAME --output none; then
+            echo "Instance exists, proceeding to delete..."
+            az container delete --resource-group $RESOURCE_GROUP --name $AZURE_CONTAINER_NAME --yes
+          else
+            echo "Instance does not exist, skipping deletion..."
+          fi
 
       - name: Wait for Azure Container Instance to be deleted
         run: |
@@ -65,4 +70,5 @@ jobs:
             --ports 8000 \
             --ip-address public \
             --restart-policy Always
+
 
