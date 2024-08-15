@@ -3,7 +3,7 @@ name: Django Continuous Integration workflow
 on:
     push:
         branches:
-            - 'dev6'
+            - 'dev8'
         paths:
             - 'tests/**'
             - '.github/workflows/django_ci.yml'
@@ -21,7 +21,7 @@ on:
     pull_request:
         types: [opened, synchronize, reopened]
         branches:
-            - dev6
+            - dev8
         paths:
             - 'tests/**'
             - '.github/workflows/django_ci.yml'
