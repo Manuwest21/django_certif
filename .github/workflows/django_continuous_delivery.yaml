@@ -1,0 +1,48 @@
+name: Django continuous delivery workflow.
+
+on:
+    push:
+        branches:
+            - 'dev8'
+        paths:
+            - 'tests/**'
+            - '.github/workflows/django_ci.yml'
+            - 'requirements.txt'
+            - 'manage.py'
+            - 'abstract_ideas/**'
+            - 'authenti/**'
+            - 'autre_test_azure.py'
+            - 'db.sqlite3'
+            - 'django/**'
+            - 'ppale/**'
+            - 'static/**'
+            - 'templates/**'
+            - 'venv/**'
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
+            - dev8
+        paths:
+            - 'tests/**'
+            - '.github/workflows/django_ci.yml'
+            - 'requirements.txt'
+            - 'manage.py'
+            - 'abstract_ideas/**'
+            - 'authenti/**'
+            - 'autre_test_azure.py'
+            - 'db.sqlite3'
+            - 'django/**'
+            - 'ppale/**'
+            - 'static/**'
+            - 'templates/**'
+            - 'venv/**'
+
+jobs:
+  health-check-job:
+    uses: ./.github/workflows/api_continuous_integration.yaml
+    secrets: inherit
+
+  build-and-deploy:
+    needs: [health-check-job]
+    uses: ./.github/workflows/api_deployment.yaml
+    secrets: inherit
