@@ -3,19 +3,22 @@ name: Build and Deploy Docker Image to Azure Container Registry and Azure Contai
 on:
   push:
     branches:
-      - dev8  # Changez en fonction de la branche que vous utilisez pour déployer
+      - dev8  
 
 jobs:
+  health-check-job:
+        uses: ./.github/workflows/django_continuous_integration.yaml
+        secrets: inherit
   deploy:
     runs-on: ubuntu-latest
     env:
-      AZURE_CONTAINER_REGISTRY: djangofinal.azurecr.io  # Nom de votre ACR
+      AZURE_CONTAINER_REGISTRY: djangofinal.azurecr.io  
       AZURE_CONTAINER_NAME: application-django-test
       RESOURCE_GROUP: RG_Devries1
-      IMAGE_NAME: westmanu21/appli-django  # Nom de l'image Docker à pousser
-      ACR_USERNAME: ${{ secrets.AZURE_ACR_USERNAME }}  # Nom d'utilisateur ACR
-      ACR_PASSWORD: ${{ secrets.AZURE_ACR_PASSWORD }}  # Mot de passe ACR
-      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}  # Informations d'identification Azure
+      IMAGE_NAME: westmanu21/appli-django  
+      ACR_USERNAME: ${{ secrets.AZURE_ACR_USERNAME }} 
+      ACR_PASSWORD: ${{ secrets.AZURE_ACR_PASSWORD }}  
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }} 
 
     steps:
       - name: Checkout code
