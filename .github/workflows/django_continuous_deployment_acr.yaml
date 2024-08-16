@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - dev8  
+  workflow_call:
 
 jobs:
   health-check-job:
         uses: ./.github/workflows/django_continuous_integration.yaml
         secrets: inherit
   deploy:
+    needs: [health-check-job]
     runs-on: ubuntu-latest
     env:
       AZURE_CONTAINER_REGISTRY: djangofinal.azurecr.io  
