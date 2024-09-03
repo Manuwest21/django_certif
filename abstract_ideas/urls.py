@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('authenti.urls')),
     path('ppale/', include('ppale.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('prometheus/', include("django_prometheus.urls")),
 ]
