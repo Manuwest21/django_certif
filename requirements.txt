@@ -7,4 +7,4 @@ python-dotenv
 openai==0.28.0
 azure.identity
 prometheus_client==0.20.0
-django-prometheus
+django-prometheus==2.3.1
