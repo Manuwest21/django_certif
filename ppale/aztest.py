@@ -4,13 +4,14 @@ from dotenv import load_dotenv
 
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# openai.api_key = os.getenv("OPENAI_API_KEY")
 # "cf2a8a541f2b4644847fc48c2ae2e9aa"
-openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT") # your endpoint should look like the following https://YOUR_RESOURCE_NAME.openai.azure.com/
+openai.api_key ='8082b44d00f04e1bbf05dffd1c6d2def'
+openai.api_base = 'https://django1.openai.azure.com/' # your endpoint should look like the following https://YOUR_RESOURCE_NAME.openai.azure.com/
 openai.api_type = 'azure'
-openai.api_version = '2024-02-01' # this might change in the future
-
-deployment_name='django3' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
+openai.api_version = '2024-02-15-preview' # this might change in the future
+# CHAT_COMPLETIONS_DEPLOYMENT_NAME=''
+deployment_name='django4' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
 messages = [
     {
         "role": "user",

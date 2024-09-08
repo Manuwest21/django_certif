@@ -1,9 +1,57 @@
 {% extends 'base.html' %}
 
+{% block content %}
 
-{%block    content%}    
-bonjour les cuisiniers
+<!-- CSS intégré pour la page d'accueil -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f7f9f9; /* Couleur de fond claire et moderne */
+        color: #333;
+    }
 
+    .hero-section {
+        background-color: #ffebc4; /* Couleur de fond douce rappelant les ingrédients frais */
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom: 2px solid #f4a261; /* Bordure couleur pêche pour une touche d'été */
+    }
 
+    .hero-section h1 {
+        color: #2a9d8f; /* Couleur turquoise pour une touche de fraîcheur */
+        font-size: 2.5em;
+        margin: 0;
+    }
 
-{% endblock%}
+    .hero-section p {
+        color: #555;
+        font-size: 1.2em;
+        margin: 20px 0;
+    }
+
+    .cta-button {
+        display: inline-block;
+        background-color: #e76f51; /* Couleur saumon pour attirer l'œil */
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1.2em;
+    }
+
+    .cta-button:hover {
+        background-color: #d95d43; /* Couleur saumon plus foncée pour l'effet survol */
+    }
+</style>
+
+<div class="hero-section">
+    <h1>Bienvenue sur FindMyRecipe!</h1>
+    <p></p>
+    <p>Votre destination pour découvrir des recettes de cuisine délicieuses à partir des ingrédients que vous avez. </p>
+    <p>Que vous soyez un chef expérimenté ou un amateur passionné, nous vous aiderons à créer des plats incroyables.</p>
+    <a href="{% url 'aliments' %}" class="cta-button">Commencez à Trouver Votre Recette</a>
+</div>
+
+{% endblock content %}

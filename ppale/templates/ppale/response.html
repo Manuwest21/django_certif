@@ -1,8 +1,60 @@
 {% extends 'base.html' %}
-{%block content %}
+{% block content %}
 
+<!-- CSS intégré pour la page de réponse -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fffbf0; /* Couleur de fond crème clair évoquant la chaleur estivale */
+        color: #333;
+    }
 
-<h1>Response from ChatGPT</h1>
-<p>{{ response }}</p>
-<a href="{% url 'home' %}">Return to home</a>
+    .container {
+        max-width: 800px;
+        margin: 20px auto;
+        background: #ffffff; /* Fond blanc pour le contenu principal */
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border: 2px solid #f4a261; /* Bordure couleur pêche pour rappeler les fruits d'été */
+    }
+
+    h1 {
+        color: #2a9d8f; /* Couleur turquoise pour évoquer la fraîcheur des ingrédients estivaux */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    p {
+        line-height: 1.6;
+        color: #333;
+        margin: 0;
+        padding: 0 15px;
+        background: #e9f5f2; /* Fond couleur menthe légère pour le texte */
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    a {
+        display: block;
+        text-align: center;
+        color: #e76f51; /* Couleur saumon pour le lien */
+        text-decoration: none;
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h1>Ma super recette de cuisine</h1>
+    <p>{{ response }}</p>
+    <a href="{% url 'home' %}">Return to home</a>
+</div>
+
 {% endblock content %}

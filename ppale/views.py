@@ -22,12 +22,20 @@ from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 
 load_dotenv()
-openai.api_type="azure"
-openai.api_base="https://django1.openai.azure.com/"
-openai.api_version="2024-05-13"
-# openai.api_key=os.getenv("OPENAI_API_KEY")
-openai.api_key="f8d3069c83c74d77b71b39d9ca5fa745"
-deployment_name="django4"
+openai.api_key ='8082b44d00f04e1bbf05dffd1c6d2def'
+openai.api_base = 'https://django1.openai.azure.com/' # your endpoint should look like the following https://YOUR_RESOURCE_NAME.openai.azure.com/
+openai.api_type = 'azure'
+openai.api_version = '2024-02-15-preview' # this might change in the future
+# CHAT_COMPLETIONS_DEPLOYMENT_NAME=''
+deployment_name='django4' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
+
+# openai.api_type="azure"
+# openai.api_base="https://django1.openai.azure.com/"
+# openai.api_version="2024-02-15-preview"
+# # openai.api_key=os.getenv("OPENAI_API_KEY")
+# openai.api_key = os.getenv("OPENAI_API_KEY")
+
+# deployment_name="django4"
 # endpoint = os.getenv["https://django.openai.azure.com/"]
 
 # deployment = os.getenv["CHAT_COMPLETIONS_DEPLOYMENT_NAME"]
@@ -297,7 +305,7 @@ def aliments_view11(request):
 
     return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
 
-deployment_id = os.getenv("CHAT_COMPLETIONS_DEPLOYMENT_NAME")
+# deployment_id = os.getenv("CHAT_COMPLETIONS_DEPLOYMENT_NAME")
 
 def aliments_view(request):
     user = request.user
@@ -318,7 +326,7 @@ def aliments_view(request):
                 'repas_souhaite': user_selection.repas_souhaite,
             }
             prompt1 = (
-    f"donne moi une recette, L'utilisateur a sélectionné les ingrédients suivants : "
+    f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce de sretours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
     f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
     f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
     

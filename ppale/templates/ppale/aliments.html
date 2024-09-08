@@ -1,13 +1,132 @@
 {% extends 'base.html' %}
-{%block content %}
+{% block content %}
+{% load static %}
 
+<!-- CSS intégré pour la page -->
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #e0f2f1; /* Arrière-plan vert clair */
+    }
 
+    .container {
+        max-width: 1000px; /* Augmenter la largeur maximale du conteneur */
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 95%; /* Utiliser une largeur en pourcentage pour plus de flexibilité */
+    }
 
-<h1>aliments : {{id_user}} >>>quels aliments voulez-vous ?>>> cochez si vous en avez et en voulez!</h1>
-<form method='POST'> 
-    {%csrf_token %}
-    {{form.as_p}}
-    <button type='submit'> valider mes aliments choisis :</button>
+    h1 {
+        color: #004d40; /* Couleur de texte sombre pour le titre */
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
+    .response-text {
+        white-space: pre-wrap; /* Conserve les espaces et les sauts de ligne */
+        line-height: 1.6;
+        color: #333; /* Couleur du texte de la réponse */
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f9fbe7; /* Fond léger pour le texte de la réponse */
+        border-radius: 8px;
+        text-align: left;
+    }
+
+    button {
+        background-color: #004d40; /* Couleur du bouton */
+        color: #fff; /* Couleur du texte du bouton */
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    button:hover {
+        background-color: #00332d; /* Couleur du bouton au survol */
+    }
+
+    .form-container {
+        max-width: 1000px; /* Augmenter la largeur maximale du conteneur du formulaire */
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 95%; /* Utiliser une largeur en pourcentage pour plus de flexibilité */
+    }
+
+    .form-container h1 {
+        color: #004d40; /* Couleur de texte sombre pour le titre */
+        text-align: center;
+    }
+
+    .form-container form {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-container form div {
+        margin-bottom: 15px; /* Espacement entre les éléments du formulaire */
+    }
+
+    .form-container form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #004d40; /* Couleur des labels */
+    }
+
+    .form-container form select, .form-container form input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .form-container form .form-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-container form .form-group input[type="checkbox"] {
+        margin-right: 10px;
+    }
+</style>
+
+<!-- Conteneur pour le formulaire et la réponse -->
+<div class="container">
+    <!-- Section pour le formulaire de sélection d'aliments -->
+    <div class="form-container">
+        <h1>Pour ma super recette : {{ id_user }} 
+        <h2> > Quels aliments voulez-vous dans votre plat ?  </h2>
+        <h3>Cochez ceux que vous avez et voulez manger !</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <!-- Utiliser une div pour chaque groupe de formulaire -->
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <button type="submit">Valider mes aliments choisis :</button>
+        </form>
+    </div>
+
+    <!-- Section pour afficher la réponse de la recette -->
+    <div class="response-text">
+        {% if response %}
+            {{ response|safe }}
+        {% else %}
+            <p>Aucune réponse disponible pour le moment.</p>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock content %}
