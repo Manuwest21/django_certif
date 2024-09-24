@@ -20,6 +20,13 @@ import openai
 
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
+import os
+from dotenv import load_dotenv
+
+# Charger le fichier .env
+load_dotenv()
+
+
 
 load_dotenv()
 openai.api_key ='8082b44d00f04e1bbf05dffd1c6d2def'
@@ -29,6 +36,19 @@ openai.api_version = '2024-02-15-preview' # this might change in the future
 # CHAT_COMPLETIONS_DEPLOYMENT_NAME=''
 deployment_name='django4' #This will correspond to the custom name you chose for your deployment when you deployed a model. 
 
+load_dotenv()
+# Variables d'environnement OpenAI
+
+
+
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+# CHAT_COMPLETIONS_DEPLOYMENT_NAME = os.getenv("CHAT_COMPLETIONS_DEPLOYMENT_NAME")
+# API_VERSION = os.getenv("api_version")
+
+
+
+# deployment_name='django4'
 # openai.api_type="azure"
 # openai.api_base="https://django1.openai.azure.com/"
 # openai.api_version="2024-02-15-preview"
@@ -314,43 +334,26 @@ def aliments_view(request):
         if form.is_valid():
             user_selection = form.save(commit=False)
             user_selection.user = user
-            user_selection.save()
+            user_selection.save()    
             
-            # Récupérer les sélections de l'utilisateur
-            selections = {
+            selections = {              # Récupérer les sélections de l'utilisateur
                 'legume': user_selection.legume,
                 'viande': user_selection.viande,
                 'feculent': user_selection.feculent,
                 'poisson': user_selection.poisson,
                 'temps_préparation_souhaité': user_selection.temps_souhaite,
-                'repas_souhaite': user_selection.repas_souhaite,
-            }
-            prompt1 = (
-    f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce de sretours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
+                'repas_souhaite': user_selection.repas_souhaite,}
+            prompt1 = (              # On prépare les données pour l'API avec consignes données
+    f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce des retours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
     f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
     f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
-    
-    f"et 30min max de préparation."
-)
+    f"et 30min max de préparation.")
+            
             messages = [
-             {
-              "role": "user",
-              "content": prompt1
-                 },      
-                {
-              "role": "assistant",
-             "content": "Je peux vous proposer une recette avec ces ingrédients. Veuillez patienter un moment pendant que je génère la recette..."
-    }
-]
-            # Préparer les données pour l'API
-            # prompt1 = (f"L'utilisateur a sélectionné les ingrédients suivants: "
-            #           f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
-            #           f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
-            #           f"il veut une recette de repas à partir de ces ingrédients de base ici pour un repas de type : "
-            #           f"{selections['repas_souhaite']} et avec un temps de préparation de : "
-            #           f"{selections['temps_préparation_souhaité']}.")
-
-           
+             { "role": "user", "content": prompt1 },      
+             { "role": "assistant",
+             "content": "Je peux vous proposer une recette avec ces ingrédients. Veuillez patienter un moment pendant que je génère la recette..."}]
+            
             response = openai.ChatCompletion.create(
                         engine=deployment_name,
                         messages=messages,
@@ -358,15 +361,16 @@ def aliments_view(request):
                         temperature=0.7,
                         top_p=0.95,
                         frequency_penalty=0,
-                        presence_penalty=0
-)
+                        presence_penalty=0)
+            
+
 
 # Extract and print the response
             text = response['choices'][0]['message']['content'].replace('\n', '').replace(' .', '.').strip()
             print(text)
 
             if response :
-            #    text = response['choices'][0]['text'].replace('\n', '').replace(' .', '.').strip()
+            
                return render(request, 'ppale/response.html', {'response': text})
             else:
                 return render(request, 'ppale/error.html', {'message': 'No response from API.'})
@@ -377,4 +381,143 @@ def aliments_view(request):
 
     return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
 
+#bug_test = 1 / 0  # Ce code déclenchera une exception ZeroDivisionError
+# def aliments_view(request):
+#     user = request.user
+#     if request.method == 'POST':
+#         form = aliments(request.POST)
+#         if form.is_valid():
+#             user_selection = form.save(commit=False)
+#             user_selection.user = user
+#             user_selection.save()
+            
+#             # Récupérer les sélections de l'utilisateur
+#             selections = {
+#                 'legume': user_selection.legume,
+#                 'viande': user_selection.viande,
+#                 'feculent': user_selection.feculent,
+#                 'poisson': user_selection.poisson,
+#                 'temps_préparation_souhaité': user_selection.temps_souhaite,
+#                 'repas_souhaite': user_selection.repas_souhaite,
+#             }
 
+#             bug_test = 1 / 0  # Ce code déclenchera une exception ZeroDivisionError
+
+#             prompt1 = (
+#     f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce de sretours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
+#     f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
+#     f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
+    
+#     f"et 30min max de préparation."
+# )
+#             messages = [
+#              {
+#               "role": "user",
+#               "content": prompt1
+#                  },      
+#                 {
+#               "role": "assistant",
+#              "content": "Je peux vous proposer une recette avec ces ingrédients. Veuillez patienter un moment pendant que je génère la recette..."
+#     }
+# ]
+#             # Préparer les données pour l'API
+#             # prompt1 = (f"L'utilisateur a sélectionné les ingrédients suivants: "
+#             #           f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
+#             #           f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
+#             #           f"il veut une recette de repas à partir de ces ingrédients de base ici pour un repas de type : "
+#             #           f"{selections['repas_souhaite']} et avec un temps de préparation de : "
+#             #           f"{selections['temps_préparation_souhaité']}.")
+
+           
+#             response = openai.ChatCompletion.create(
+#                         engine=deployment_name,
+#                         messages=messages,
+#                         max_tokens=500,
+#                         temperature=0.7,
+#                         top_p=0.95,
+#                         frequency_penalty=0,
+#                         presence_penalty=0
+# )
+
+# # Extract and print the response
+#             text = response['choices'][0]['message']['content'].replace('\n', '').replace(' .', '.').strip()
+#             print(text)
+
+#             if response :
+#             #    text = response['choices'][0]['text'].replace('\n', '').replace(' .', '.').strip()
+#                return render(request, 'ppale/response.html', {'response': text})
+#             else:
+#                 return render(request, 'ppale/error.html', {'message': 'No response from API.'})
+            
+
+#     else:
+#         form = aliments()
+
+#     return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
+
+
+# def aliments_view(request):
+#     """
+#     View pour gérer la sélection d'aliments par l'utilisateur, 
+#     envoyer ces informations à l'API Azure OpenAI, 
+#     et recevoir une recette basée sur les ingrédients sélectionnés.
+#     """
+#             # Récupère l'utilisateur connecté
+#     user = request.user  
+#     if request.method == 'POST':
+#             # Instancie le formulaire avec les données envoyées par l'utilisateur
+#         form = aliments(request.POST)  
+        
+#         if form.is_valid():
+#             # Enregistre la sélection de l'utilisateur sans commit immédiat à la base de données
+#             user_selection = form.save(commit=False)
+#              # Associe l'utilisateur connecté à la sélection d'aliments
+#             user_selection.user = user  
+#             # Enregistre la sélection dans la base de données
+#             user_selection.save()  
+            
+#             # Récupére les sélections de l'utilisateur pour les inclure dans la requête à l'API
+#             selections = {
+#                 'legume': user_selection.legume,
+#                 'viande': user_selection.viande,
+#                 'feculent': user_selection.feculent,
+#                 'poisson': user_selection.poisson,
+#                 'temps_préparation_souhaité': user_selection.temps_souhaite,
+#                 'repas_souhaite': user_selection.repas_souhaite,
+#             }
+            
+#             # Prépare le prompt pour l'API OpenAI en intégrant les choix de l'utilisateur
+#             prompt1 = (
+#                 "Donne-moi une recette, dans un format espacé avec des séries d'étapes notifiées, "
+#                 "des étapes claires s'adaptant à tout profil utilisateur (doit être adoptable facilement pour un non expert en cuisine) "
+#                 "L'utilisateur a sélectionné les ingrédients suivants : "
+#                 f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
+#                 f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
+#                 "et 30 minutes max de préparation."
+#             )
+            
+#             # Création du message d'entrée pour l'API Azure OpenAI
+#             messages = [
+#             # Intégration de la liste d'ingrédients sélectionnés par l'utilisateur et des "consignes" données
+#                 {"role": "user", "content": prompt1},  
+#                 {"role": "assistant", "content": 
+#                  "Je peux vous proposer une recette avec ces ingrédients. Veuillez patienter un moment pendant que je génère la recette..."}
+#             ]
+            
+#             # Requête à l'API Azure OpenAI pour générer une recette basée sur les sélections de l'utilisateur
+#             response = openai.ChatCompletion.create(
+#             # Nom du déploiement défini pour Azure OpenAI
+#                 engine=deployment_name,  
+#             # Messages envoyés à l'API (prompt utilisateur + réponse initiale)
+#                 messages=messages,  
+#             # Limite le nombre de tokens (mots générés) dans la réponse
+#                 max_tokens=500,  
+#             # Contrôle la créativité de la réponse (plus élevé = plus créatif)
+#                 temperature=0.7,  
+#             # Sélection des tokens basés sur la probabilité cumulative
+#                 top_p=0.95,  
+#             # Évite la répétition des mêmes phrases
+#                 frequency_penalty=0,  
+#             # Encourage ou non l'introduction de nouveaux sujets
+#                 presence_penalty=0  
+#             )

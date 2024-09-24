@@ -13,7 +13,7 @@ token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://co
 client = AzureOpenAI(
     azure_endpoint=endpoint,
     azure_ad_token_provider=token_provider,
-    api_version="2024-02-01",
+    api_version="2024-05-13",
 )
       
 completion = client.chat.completions.create(
