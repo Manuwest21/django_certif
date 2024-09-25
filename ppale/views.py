@@ -374,10 +374,15 @@ def aliments_view(request):
                 'temps_préparation_souhaité_bis': user_selection.choix_user
                 }
             prompt1 = (              # On prépare les données pour l'API avec consignes données
-    f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce des retours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
+    f"Donne-moi une recette bien structurée, agréable à lire, avec des sections distinctes pour les ingrédients et les étapes. "
+    f"Utilise des retours à la ligne et des espacements entre chaque étape. "
+    f"Voici les ingrédients sélectionnés par l'utilisateur : "
     f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
-    f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']},et veux une recette qui {role_description} "
-    f"et 30min max de préparation.")
+    f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}. "
+    f"L'utilisateur souhaite une recette qui {role_description} "
+    f"et la préparation doit inclure des instructions claires. "
+    f"Assure-toi d'indiquer les ingrédients en premier sous une section Ingredients, suivis des étapes numérotées , et espace les éléments pour une meilleure lisibilité, avec des espaces et retour à la ligne!."
+)
             
             messages = [
              { "role": "user", "content": prompt1 },      
@@ -402,14 +407,33 @@ def aliments_view(request):
             if response :
             
                return render(request, 'ppale/response.html', {'response': text})
-            else:
-                return render(request, 'ppale/error.html', {'message': 'No response from API.'})
-            
 
+# Supposons que la réponse soit formatée comme suit :
+# Ingrédients:
+# - ingrédient 1
+# - ingrédient 2
+#
+# Étapes:
+# 1. Étape 1
+# 2. Étape 2
+
+# Séparation des sections
+            # if "Ingrédients:" in text and "Étapes:" in text:
+            #     sections = text.split("Étapes:")
+            #     ingredients = sections[0].replace("Ingrédients:", "").strip().split('\n')
+            #     steps = sections[1].strip().split('\n')
+            # else:
+            #     ingredients = []
+            #     steps = []
+
+# Maintenant, vous pouvez passer les ingrédients et les étapes au template
+            # if response:
+            #     return render(request, 'ppale/response.html', {'ingredients': ingredients, 'steps': steps,'user': user, 'form': form})
     else:
         form = aliments()
 
-    return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
+    return render(request, 'ppale/aliments.html', {'user': user, 'form': form})    
+                # return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
 
 #bug_test = 1 / 0  # Ce code déclenchera une exception ZeroDivisionError
 # def aliments_view(request):

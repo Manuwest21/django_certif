@@ -7,15 +7,15 @@
         {% url 'func_create' as url_func_create%}
 
         {% if request.user.is_authenticated %}
-      <span class="navbar text"> {{user.get_username|upper}} vous êtes connecté à votre compte 11</span> 
-      <button type="submit"> <a href="{% url 'logout'%}?next={{request.path}}">se deconnecter   ------    {{user.username}}</a>
+      <span class="navbar text"> {{user.get_username|upper}} vous êtes bien connecté à votre profil</span> 
+      <button type="submit"> <a href="{% url 'logout'%}?next={{request.path}}">se déconnecter de mon compte</a>
         <div class="home_img">      
    
           {% comment %} <img src="{% static 'img/cuisinier.jpg' %}" alt="aigle volant"> {% endcomment %}
       </div>   
       {%  else %}
       <span class="navbar text">pas connecté</span>
-      <button type="submit"> <a href={% url 'login'%}>se connecter   ------    </a>
+      <button type="submit"> <a href={% url 'login'%}>se connecter </a>
       {% endif %}
       <ul class="nav nav-pills" style="margin-top: 10px;">
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link active" aria-current="page">Page d'accueil </a></li>
@@ -24,10 +24,10 @@
         {% if request.user.is_authenticated %}
         <!-- <li class="nav-item"><a href="{% url 'liste_ideas' %}" class="nav-link active" aria-current="page">liste des idées </a></li>
         <li class="nav-item"><a href="{% url 'creer' %}" class="nav-link active" aria-current="page">ajouter une idée </a></li> -->
-        <li class="nav-item"><a href="{% url 'aliments' %}" class="nav-link active" aria-current="page">choisir mes aliments </a></li>
+        <li class="nav-item"><a href="{% url 'aliments' %}" class="nav-link active" aria-current="page">choisir ma recette personnalisée </a></li>
         {% endif %}
-        <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link active" aria-current="page">s'enregistrer </a></li>
-        <li class="nav-item"><a href="{% url 'register' %}" class="nav-link active" aria-current="page">s'enregistrer bis</a></li>
+        <!-- <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link active" aria-current="page">s'enregistrer </a></li> -->
+        <li class="nav-item"><a href="{% url 'register' %}" class="nav-link active" aria-current="page">s'enregistrer</a></li>
         <!-- <li class="nav-item"><a href="{% url 'idees_popu' %}" class="nav-link active" aria-current="page">idees_popu </a></li> -->
         {% comment %} <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link">About</a></li>
             <a>{% if request.path == url_about%}s'enregistrer{% endif %}  {% endcomment %}

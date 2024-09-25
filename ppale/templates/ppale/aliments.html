@@ -27,6 +27,12 @@
         text-align: center;
     }
 
+    h2, h3 {
+        color: #004d40; /* Couleur pour les sous-titres */
+        margin: 20px 0; /* Espacement supérieur et inférieur */
+        text-align: center; /* Centrer les sous-titres */
+    }
+
     .response-text {
         white-space: pre-wrap; /* Conserve les espaces et les sauts de ligne */
         line-height: 1.6;
@@ -103,9 +109,9 @@
 <div class="container">
     <!-- Section pour le formulaire de sélection d'aliments -->
     <div class="form-container">
-        <h1>Pour ma super recette : {{ id_user }} 
-        <h2> > Quels aliments voulez-vous dans votre plat ?  </h2>
-        <h3>Cochez ceux que vous avez et voulez manger !</h3>
+        <h1>Pour ma super recette : {{ id_user }} </h1>
+        <h2>Quels ingrédients avez-vous à consommer?</h2>
+        <h3>Sélectionnez les et le temps que vous avez pour cuisiner</h3>
         <form method="POST">
             {% csrf_token %}
             <!-- Utiliser une div pour chaque groupe de formulaire -->

@@ -121,9 +121,9 @@ class UserSelection(models.Model):
 
 
     temps_choices= [
-        ('moins de 15min abs', 'moins de 16minutes'),
-        ('30 minutes max', 'moins de 31 minutes'),
-        ('ok pour longue préparation', 'temps de préparation toléré entre 30minutes et 1h30')
+        ('moins de 15min abs', 'moins de 15 minutes'),
+        ('30 minutes max', 'moins de 30 minutes'),
+        ('ok pour longue préparation', 'temps de préparation toléré entre 30 minutes et 1h')
 
     ]
     temps_souhaite= [ models.CharField(max_length=100, choices=temps_choices, blank=True)]
