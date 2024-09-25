@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - Générateur de Recettes</title>
+    <!-- Ajoutez ici un lien vers votre fichier CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9; /* Couleur de fond légère */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d35400; /* Couleur orange évoquant la cuisine */
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .temps-box {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .temps-box input {
+            width: 30%;
+        }
+
+        button {
+            background-color: #d35400; /* Couleur orange évoquant la cuisine */
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #e67e22; /* Couleur d'hover légèrement plus claire */
+        }
+
+        p {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #d35400;
+            text-decoration: none;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Inscription</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <!-- Username -->
+            <label for="username">Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" placeholder="Entrez votre nom d'utilisateur" required>
+
+            <!-- Email -->
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Entrez votre adresse email" required>
+
+            <!-- Password -->
+            <label for="password1">Mot de passe</label>
+            <input type="password" name="password1" id="password1" placeholder="Entrez votre mot de passe" required>
+
+            <!-- Password confirmation -->
+            <label for="password2">Confirmez le mot de passe</label>
+            <input type="password" name="password2" id="password2" placeholder="Confirmez votre mot de passe" required>
+
+            <!-- particularités alimentaires  -->
+            <label for="role">Choisissez un rôle</label>
+            <select name="role" id="role" required>
+            <option value="" disabled selected>Sélectionnez un rôle</option>
+            {% for role in roles %}
+                <option value="{{ role.id }}">{{ role.name }}</option>
+            {% endfor %}
+            </select>
+            <!-- Temps de préparation (3 champs) -->
+            <label>Temps de préparation (maximum)</label>
+            <div class="temps-box">
+                <input type="text" name="temps_preparation_1" placeholder="Temps 1">
+                <input type="text" name="temps_preparation_2" placeholder="Temps 2">
+                <input type="text" name="temps_preparation_3" placeholder="Temps 3">
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit">S'inscrire</button>
+        </form>
+
+        <!-- Already have an account -->
+        <p>Vous avez déjà un compte ? <a href="{% url 'login' %}">Connectez-vous</a></p>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2024 Générateur de Recettes - Tous droits réservés</p>
+        </div>
+    </div>
+
+</body>
+</html>

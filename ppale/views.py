@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, DetailView
-from.models import Idee, Votant,  UserSelection
+from.models import Idee, Votant,  UserSelection, Role
 from . import forms
 from .forms import Voter, Idea, aliments
 from django.contrib.auth import login, authenticate, logout
@@ -83,6 +83,30 @@ token_provider = get_bearer_token_provider(DefaultAzureCredential(), "https://co
 # client = OpenAI (api_key=os.getenv("open_ai_key"))
 
 # client = OpenAI (api_key='sk-proj-18fEAPYKQaYAm5Mt0Kc4T3BlbkFJ6tyvsnXi9GQTVz1ehpAr')
+
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from .forms import CustomUserCreationForm
+
+def register(request):
+    roles=Role.objects.all()
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        roles=Role.objects.all()
+        if form.is_valid():
+            user = form.save()
+            user.role = form.cleaned_data['role']
+            # Connexion automatique de l'utilisateur après l'inscription
+            login(request, user)
+            return redirect('home')
+        else:
+            print(form.errors)
+    else:
+        
+              # Affichez les erreurs de validation du formulaire
+        form = CustomUserCreationForm()
+    return render(request, 'ppale/register.html', {'form': form,'roles':roles})
+
 def home (request):
     
     return render (request, 'ppale/home.html')
@@ -329,24 +353,30 @@ def aliments_view11(request):
 
 def aliments_view(request):
     user = request.user
+    
     if request.method == 'POST':
         form = aliments(request.POST)
         if form.is_valid():
             user_selection = form.save(commit=False)
             user_selection.user = user
-            user_selection.save()    
-            
+            user_selection.save()  
+            role = user.role  
+            role_id=user.role_id
+            role_description = user.role.description if user.role else "soit généraliste"
+            print(role)
             selections = {              # Récupérer les sélections de l'utilisateur
                 'legume': user_selection.legume,
                 'viande': user_selection.viande,
                 'feculent': user_selection.feculent,
                 'poisson': user_selection.poisson,
                 'temps_préparation_souhaité': user_selection.temps_souhaite,
-                'repas_souhaite': user_selection.repas_souhaite,}
+                'repas_souhaite': user_selection.repas_souhaite,
+                'temps_préparation_souhaité_bis': user_selection.choix_user
+                }
             prompt1 = (              # On prépare les données pour l'API avec consignes données
     f"donne moi une recette, dan sun format espacé avec des séries d'étapes notifiées, agréable à lire, avce des retours à la ligne et des espacements entre chaque étape,   L'utilisateur a sélectionné les ingrédients suivants : "
     f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
-    f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}, "
+    f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']},et veux une recette qui {role_description} "
     f"et 30min max de préparation.")
             
             messages = [

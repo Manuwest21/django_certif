@@ -11,6 +11,7 @@ urlpatterns = [
     path('creer_idees', views.creer_idee, name="creer"),
     path('aliments', views.aliments_view, name="aliments"),
     path('idees_popu', views.idees_popu, name="idees_popu"),
+    path('register', views.register, name="register"),
     # path('func_create/',views.FunctionalityCreateView.as_view(), name="func_create")
     # path('special/', views.special_view, name='special'),
     # path('signup/', views.SignupPage.as_view(), name='signup'),

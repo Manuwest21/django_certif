@@ -1,9 +1,25 @@
 from django.db import models
 from authenti.models import User
-
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 # Create your models here.
 
+
+class Prepa(models.Model):
+    votant = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Votant: {self.votant.username}"
+
+    @property
+    def temps_preparation(self):
+        return {
+            'temps_preparation_1': self.votant.temps_preparation_1,
+            'temps_preparation_2': self.votant.temps_preparation_2,
+            'temps_preparation_3': self.votant.temps_preparation_3,
+        }
+    
 class Idee(models.Model):
     formulation = models.CharField(max_length=100)
     detail = models.CharField(max_length=200, null=True)
@@ -49,7 +65,7 @@ class Votant(models.Model):
 
 
 class UserSelection(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Utilise AUTH_USER_MODEL
     legume_choices = [
        ('asperge', 'Asperge'),
         ('aubergine', 'Aubergine'),
@@ -111,8 +127,12 @@ class UserSelection(models.Model):
 
     ]
     temps_souhaite= [ models.CharField(max_length=100, choices=temps_choices, blank=True)]
+    temps_préparation_souhaité = models.CharField(max_length=20, null=True, blank=True)
 
+    
 
+    choix_user = models.CharField(max_length=25, blank=True)  # Pas de choix ici
+    
     repas_choices=[
         ('entree','entree'),
         ('plat', 'plat'),
@@ -137,3 +157,31 @@ class UserSelection(models.Model):
 
     def __str__(self):
         return f"Selections of {self.user.username}"
+from django.db import models
+
+class Role(models.Model):
+    name = models.CharField(max_length=100)  # Nom du rôle
+    description = models.TextField()  # Champ de texte pour la description
+
+    def __str__(self):
+        return self.name
+    
+
+class CustomUser(AbstractUser):
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, blank=True)
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customuser_groups',  # Ajout de related_name pour éviter les conflits
+        blank=True,
+        help_text='The groups this user belongs to.'
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_permissions',  # Ajout de related_name pour éviter les conflits
+        blank=True,
+        help_text='Specific permissions for this user.'
+    )
+
+    def __str__(self):
+        return self.username

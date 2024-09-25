@@ -1,0 +1,25 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.legume.label }} {{ form.legume }}
+    {{ form.viande.label }} {{ form.viande }}
+    {{ form.feculent.label }} {{ form.feculent }}
+    {{ form.poisson.label }} {{ form.poisson }}
+    {{ form.temps_préparation_souhaité.label }} {{ form.temps_préparation_souhaité }}
+    {{ form.repas_souhaite.label }} {{ form.repas_souhaite }}
+    {{ form.choix_user.label }} {{ form.choix_user }}
+
+    <button type="submit">Soumettre</button>
+</form>
+
+{% if form.errors %}
+    <ul>
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}

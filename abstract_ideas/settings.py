@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ppale',
     'authenti',
     'django_prometheus',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
@@ -130,7 +131,7 @@ STATIC_URL = 'static/ppale/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'authenti.User'
+AUTH_USER_MODEL = 'ppale.CustomUser'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL= 'authenti/home'
 
