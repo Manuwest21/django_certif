@@ -62,8 +62,8 @@ class aliments(ModelForm):
             'feculent': forms.Select(choices=UserSelection.feculent_choices),
             'poisson': forms.Select(choices=UserSelection.poisson_choices),
             'type_repas': forms.Select(choices=UserSelection.repas_choices),
-            'temps_préparation_souhaité': forms.Select(choices=UserSelection.temps_choices),
-            'choix_user': forms.Select()
+            'temps_préparation_souhaité': forms.Select(choices=UserSelection.temps_choices)
+            
         }
 
     @classmethod
@@ -139,4 +139,25 @@ class CustomUserCreationForm(UserCreationForm):
         empty_label="Sélectionnez un rôle")
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'temps_preparation_1', 'temps_preparation_2', 'temps_preparation_3','role']
+        fields = ['username', 'email', 'password1', 'password2', 'temps_preparation_1', 'temps_preparation_2', 'temps_preparation_3']
+
+
+# forms.py
+
+
+class MetricsForm(forms.Form):      
+    METRICS_CHOICES = [           # Ajout des métriques que l'on veut proposer en choix de visuel pour l'administrateur
+        ('django_http_responses_total_by_status_view_method_total', 'Total des réponses par statut et méthode de vue'),
+        ('django_http_responses_body_total_bytes', 'Total des octets du corps des réponses'),
+        ('django_http_responses_total_by_charset_total', 'Total des réponses par charset'),
+        ('django_http_responses_streaming_total', 'Total des réponses en streaming'),
+        ('django_http_exceptions_total_by_view_total', 'Total des exceptions par vue'),
+        
+    ]
+
+    selected_metrics = forms.MultipleChoiceField(
+        choices=METRICS_CHOICES,
+        widget=forms.CheckboxSelectMultiple,
+        required=True,
+        label="Sélectionnez les métriques que vous voulez afficher"
+    )

@@ -5,19 +5,21 @@ import unittest
 from unittest.mock import patch
 from django.test import Client
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.contrib.auth.models import CustomUser
 from ppale.forms import aliments
 from ppale.models import UserSelection
 import openai
 import django
 from django.contrib.auth import get_user_model
 django.setup()
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abstract_ideas.settings')  # Remplacez 'nom_de_votre_projet' par le nom de votre projet
 
 import os
 import django
 
 # Définir la variable d'environnement pour les paramètres Django
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'your_project_name.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'abstract_ideas.settings')
 django.setup()
 
 

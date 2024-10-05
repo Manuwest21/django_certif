@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affichage des métriques</title>
+</head>
+<body>
+    <h1>Choisissez vos métriques</h1>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Affiche les champs du formulaire -->
+        <button type="submit">Afficher les métriques</button>
+    </form>
+
+    {% if metrics_data %}
+        <h2>Métriques sélectionnées</h2>
+        <ul>
+            {% for metric, value in metrics_data.items %}
+                <li>{{ metric }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

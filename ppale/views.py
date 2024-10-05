@@ -3,13 +3,13 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, DetailView
 from.models import Idee, Votant,  UserSelection, Role
 from . import forms
-from .forms import Voter, Idea, aliments
+from .forms import Voter, Idea, aliments, MetricsForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.db.models import F
-
+import requests
 import os
 # from openai import OpenAI
 from dotenv import load_dotenv
@@ -41,10 +41,10 @@ load_dotenv()
 
 
 
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-# AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
-# CHAT_COMPLETIONS_DEPLOYMENT_NAME = os.getenv("CHAT_COMPLETIONS_DEPLOYMENT_NAME")
-# API_VERSION = os.getenv("api_version")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
+CHAT_COMPLETIONS_DEPLOYMENT_NAME = os.getenv("CHAT_COMPLETIONS_DEPLOYMENT_NAME")
+API_VERSION = os.getenv("api_version")
 
 
 
@@ -381,7 +381,7 @@ def aliments_view(request):
     f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}. "
     f"L'utilisateur souhaite une recette qui {role_description} "
     f"et la préparation doit inclure des instructions claires. "
-    f"Assure-toi d'indiquer les ingrédients en premier sous une section Ingredients, suivis des étapes numérotées , et espace les éléments pour une meilleure lisibilité, avec des espaces et retour à la ligne!."
+    f"Assure-toi d'indiquer les ingrédients en premier sous une section Ingredients, suivis des étapes numérotées , et espace les éléments pour une meilleure lisibilité, avec des espaces et retour à la ligne! je veux que ce soit aéré: pas en 1 bloc."
 )
             
             messages = [
@@ -392,7 +392,7 @@ def aliments_view(request):
             response = openai.ChatCompletion.create(
                         engine=deployment_name,
                         messages=messages,
-                        max_tokens=500,
+                        max_tokens=800,
                         temperature=0.7,
                         top_p=0.95,
                         frequency_penalty=0,
@@ -401,7 +401,11 @@ def aliments_view(request):
 
 
 # Extract and print the response
-            text = response['choices'][0]['message']['content'].replace('\n', '').replace(' .', '.').strip()
+            # text = response['choices'][0]['message']['content'].replace('\n', '').replace(' .', '.').strip()
+            text = response['choices'][0]['message']['content'].strip()
+
+# Remplacez les retours à la ligne par des balises HTML <br>
+            text = text.replace('\n', '<br>').strip()
             print(text)
 
             if response :
@@ -433,6 +437,35 @@ def aliments_view(request):
         form = aliments()
 
     return render(request, 'ppale/aliments.html', {'user': user, 'form': form})    
+
+
+def metrics_view(request):
+    metrics_data = {}
+
+    # Récupération des métriques depuis votre propre endpoint
+    response = requests.get('http://localhost:8000/prometheus/metrics')
+    metrics_text = response.text.splitlines()
+
+    # Affichage des métriques récupérées pour débogage
+    print("Métriques récupérées:", metrics_text)
+
+    if request.method == 'POST':
+        form = MetricsForm(request.POST)
+        if form.is_valid():
+            selected_metrics = form.cleaned_data['selected_metrics']
+            print("Métriques sélectionnées:", selected_metrics)  # Debug
+            for metric in selected_metrics:
+                for line in metrics_text:
+                    if line.startswith(metric):
+                        metrics_data[metric] = line
+            print("Données des métriques:", metrics_data)  # Debug
+        else:
+            print("Erreurs du formulaire:", form.errors)  # Debug
+    else:
+        form = MetricsForm()
+
+    return render(request, 'ppale/metrics.html', {'form': form, 'metrics_data': metrics_data})
+
                 # return render(request, 'ppale/aliments.html', {'user': user, 'form': form})
 
 #bug_test = 1 / 0  # Ce code déclenchera une exception ZeroDivisionError
@@ -574,4 +607,75 @@ def aliments_view(request):
 #                 frequency_penalty=0,  
 #             # Encourage ou non l'introduction de nouveaux sujets
 #                 presence_penalty=0  
+#             )
+
+
+
+# def aliments_view(request):
+    
+#     user = request.user                                                             # On récupère l'utilisateur actuel qui a initié la requête
+    
+    
+#     if request.method == 'POST':                                                    # Si la requête est de type POST, on traite les données envoyées via un formulaire
+        
+#         form = aliments(request.POST)                                               # On instancie le formulaire avec les données POST envoyées par l'utilisateur
+        
+        
+#         if form.is_valid():                                                         # On vérifie si le formulaire est valide (toutes les validations sont passées avec succès)
+           
+#             user_selection = form.save(commit=False)                                # On enregistre la sélection de l'utilisateur, sans la sauvegarder immédiatement (commit=False)
+            
+           
+#             user_selection.user = user                                              # On associe la sélection à l'utilisateur courant
+#             user_selection.save()                                                   # On enregistre la sélection de l'utilisateur dans la base de données
+            
+
+#             role = user.role                                                        # On récupère le rôle de l'utilisateur
+#             role_id = user.role_id                                                  # Si l'utilisateur n'a pas de rôle défini, on lui attribue la description "soit généraliste"
+            
+#             role_description = user.role.description if user.role else "soit généraliste"
+#             print(role)                                                             # On affiche le rôle dans la console (utile pour le debug)
+
+           
+#             selections = {                                                          # On prépare un dictionnaire contenant les choix alimentaires faits par l'utilisateur
+#                 'legume': user_selection.legume,
+#                 'viande': user_selection.viande,
+#                 'feculent': user_selection.feculent,
+#                 'poisson': user_selection.poisson,
+#                 'temps_préparation_souhaité': user_selection.temps_souhaite,
+#                 'repas_souhaite': user_selection.repas_souhaite,
+#                 'temps_préparation_souhaité_bis': user_selection.choix_user
+#             }
+            
+            
+#             prompt1 = (                                                             # On crée un message "prompt" pour l'API GPT avec les informations de l'utilisateur
+#                 f"Donne-moi une recette bien structurée, agréable à lire, avec des sections distinctes pour les ingrédients et les étapes. "
+#                 f"Utilise des retours à la ligne et des espacements entre chaque étape. "
+#                 f"Voici les ingrédients sélectionnés par l'utilisateur : "
+#                 f"Légume: {selections['legume']}, Viande: {selections['viande']}, "
+#                 f"Féculent: {selections['feculent']}, Poisson: {selections['poisson']}. "
+#                 f"L'utilisateur souhaite une recette qui {role_description} "
+#                 f"et la préparation doit inclure des instructions claires. "
+#                 f"Assure-toi d'indiquer les ingrédients en premier sous une section Ingrédients, suivis des étapes numérotées, et espace les éléments pour une meilleure lisibilité, avec des espaces et retour à la ligne ! Je veux que ce soit aéré : pas en un bloc."
+#             )
+            
+            
+#             messages = [                                                            # On prépare les messages qui vont être envoyés à l'API GPT
+                
+#                 { "role": "user", "content": prompt1 },                             # Le message utilisateur contient les instructions de la recette
+                
+#                 { "role": "assistant",                                              # Message assistant simulé, indiquant que la génération de la recette est en cours
+#                   "content": "Je peux vous proposer une recette avec ces ingrédients. Veuillez patienter un moment pendant que je génère la recette..."
+#                 }
+#             ]
+            
+           
+#             response = openai.ChatCompletion.create(                               # On appelle l'API OpenAI ChatCompletion avec les messages et les paramètres
+#                 engine=deployment_name,                                            # On utilise le nom du déploiement défini
+#                 messages=messages,                                                 # On envoie les messages à l'API
+#                 max_tokens=800,                                                    # Limite le nombre de tokens dans la réponse (pour limiter la taille du texte généré)
+#                 temperature=0.7,                                                   # Contrôle la créativité du modèle (plus élevé = plus créatif)
+#                 top_p=0.95,                                                        # Contrôle la diversité des réponses (valeur proche de 1 donne plus de diversité)
+#                 frequency_penalty=0,                                               # Évite la répétition excessive de mots dans la réponse
+#                 presence_penalty=0                                                 # Encourage ou non l'usage de nouveaux concepts (ici, 0 signifie pas d'encouragement)
 #             )

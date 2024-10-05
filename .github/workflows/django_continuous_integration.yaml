@@ -3,7 +3,7 @@ name: Django Continuous Integration workflow
 on:
     push:
         branches:
-            - 'dev_test'
+            - 'develop1'
         paths:
             - 'tests/**'
             - '.github/workflows/django_ci.yml'

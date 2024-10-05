@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+
 {% block content %}
 
 <!-- CSS intégré pour la page de réponse -->
@@ -53,7 +53,7 @@
 
 <div class="container">
     <h1>Ma super recette de cuisine</h1>
-    <p>{{ response }}</p>
+    <p>{{ response|safe  }}</p>
     <a href="{% url 'home' %}">Return to home</a>
 </div>
 

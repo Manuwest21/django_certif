@@ -1,21 +1,14 @@
-version: '3.8'
-networks:
+version: '3.8'                                                            # Version du Docker Compose utilisée
+
+networks:                                                                 # Définition des réseaux
   monitoring:
-    driver: bridge
+    driver: bridge                                                        # Utilisation du pilote de réseau bridge
 volumes:
-  prometheus_data: {}
-  grafana-data: {}
-services:
-  # django:
-  #   build:
-  #     context: .
-  #     dockerfile: dockerfile
-  #   container_name: django_app
-  #   ports:
-  #     - "8001:8000"
-  #   networks:
-  #     - monitoring
-  prometheus:
+  prometheus_data: {}                                                     # Volume pour stocker les données de Prometheus
+  grafana-data: {}                                                        # Volume pour stocker les données de Grafana
+
+services:                                                                 # Définition des conteneurs à exécuter
+  prometheus:                                                             # Service Prometheus pour la collecte de métriques
       image: prom/prometheus:latest
       container_name: prometheus
       restart: unless-stopped
@@ -24,42 +17,56 @@ services:
         - ./prometheus.yml:/etc/prometheus/prometheus.yml
         - prometheus_data:/prometheus
       command:
-        - '--config.file=/etc/prometheus/prometheus.yml'
+        - '--config.file=/etc/prometheus/prometheus.yml'                   # Chemin vers le fichier de configuration
         - '--storage.tsdb.path=/prometheus'
         - '--web.console.libraries=/etc/prometheus/console_libraries'
         - '--web.console.templates=/etc/prometheus/consoles'
         - '--web.enable-lifecycle'
       ports:
-        - 9090:9090
+        - 9090:9090                                                       # Expose le port 9090 pour accéder à l'interface de Prometheus
       
-      depends_on:
-        - app
+      depends_on:                                                         # Indique les dépendances entre services
+        - app                                                             # Prometheus dépend de l'application Django pour démarrer
       networks:
-        - monitoring
+        - monitoring                                                      # Associe le service au réseau de monitoring
     
 
-  grafana:
-    image: grafana/grafana-oss:latest
+  grafana:                                                                # Service Grafana pour la visualisation des métriques
+    image: grafana/grafana-oss:latest                                     # Image Docker de Grafana
     container_name: grafana
     ports:
-      - '3000:3000'
+      - '3000:3000'                                                       # Expose le port 3000 pour accéder à l'interface de Grafana
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_SECURITY_ADMIN_USER: "admin"
-      GF_SECURITY_ADMIN_PASSWORD: "newpassword"
+      GF_SECURITY_ADMIN_USER: "admin"                                     # Définit l'utilisateur administrateur par défaut
+      GF_SECURITY_ADMIN_PASSWORD: "newpassword"                           # Définit le mot de passe de l'utilisateur administrateur
     volumes:
-      - grafana-data:/var/lib/grafana
+      - grafana-data:/var/lib/grafana                                     # Monte le volume pour stocker les données de Grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini                            # Montre le fichier local grafana.ini
     restart: unless-stopped
     networks:
-      - monitoring
+      - monitoring                                                        # Associe le service au réseau de monitoring
 
-  app:
+  app:                                                                    # Service pour l'application Django
       build:
         context: .
-        dockerfile: Dockerfile
+        dockerfile: Dockerfile                                            # Fichier Dockerfile de django à utiliser pour la construction de l'image
       
       ports:
         - "8000:8000"
-      command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+      command: ["python3", "manage.py", "runserver", "0.0.0.0:8000"]      # Commande pour démarrer l'application
       networks:
        - monitoring
+
+
+
+
+# django:
+  #   build:
+  #     context: .
+  #     dockerfile: dockerfile
+  #   container_name: django_app
+  #   ports:
+  #     - "8001:8000"
+  #   networks:
+  #     - monitoring
