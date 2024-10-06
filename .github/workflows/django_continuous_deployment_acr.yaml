@@ -3,7 +3,7 @@ name: Build and Deploy Docker Image to Azure Container Registry and Azure Contai
 on:
   push:
     branches:
-      - dev8  
+      - dev_test2  
   workflow_call:
 
 jobs:
