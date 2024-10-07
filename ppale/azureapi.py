@@ -48,4 +48,4 @@ completion = client.chat.completions.create(
     }
 )
       
-print(completion.to_json())
+print(completion.to_json())#
