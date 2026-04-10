@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, DetailView
-from.models import Idee, Votant
+from.models import Idee, Votant, bets_faits
 from . import forms
-from .forms import Voter, Idea
+from .forms import Voter, Idea, bets_faits, bets
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -26,6 +26,11 @@ class IdeasListView(ListView):
     model = Idee
     template_name = "ppale/liste_idees.html"
     context_object_name = "ideas"
+
+class bets_faits_view(ListView):
+    model = bets_faits
+    template_name = "ppale/bets_faits.html"
+    context_object_name = "bets_faits"
     
     
 class IdDetailView(DetailView):
@@ -70,7 +75,19 @@ def vote(request, id_user):
         form = Voter()
    
     return render (request, 'ppale/vote.html', {'user':user, 'form':form, 'id_user':id_user})
-    
+
+def creer_paris(request):
+    if request.method == 'POST':
+        form = bets(request.POST)
+        if form.is_valid():
+            bets=form.save(commit=False)
+            bets.save()          
+            return redirect ('creer_paris')
+    else:
+        form = bets()
+    return render (request, 'ppale/creer_paris.html', {'form':form})
+
+
 def creer_idee(request):
     if request.method == 'POST':
         form = Idea(request.POST)
@@ -83,6 +100,27 @@ def creer_idee(request):
         form = Idea()
     return render (request, 'ppale/creer_idees.html', {'form':form})
 
+def creer_paris(request):
+    if request.method == 'POST':
+        form = bets(request.POST)
+        if form.is_valid():
+
+            form.save()          
+            return redirect ('creer_paris')
+    else:
+        form = bets()
+    return render (request, 'ppale/creer_paris.html', {'form':form})
+
+def bets_faits(request):
+    if request.method == 'POST':
+        form = bets(request.POST)
+        if form.is_valid():
+
+            form.save()          
+            return redirect ('bets_faits')
+    else:
+        form = bets()
+    return render (request, 'ppale/bets_faits.html', {'form':form})
 
 def add_note(request, nom_user_rdv):                                                    #donne la possibilité d'ajouter une note, fonctionalité disponible à partir de la liste de tous les rendez_vous
    

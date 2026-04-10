@@ -20,6 +20,9 @@
         {% if request.user.is_authenticated %}
         <li class="nav-item"><a href="{% url 'liste_ideas' %}" class="nav-link active" aria-current="page">liste des idées </a></li>
         <li class="nav-item"><a href="{% url 'creer' %}" class="nav-link active" aria-current="page">ajouter une idée </a></li>
+        <li class="nav-item"><a href="{% url 'bets_faits' %}" class="nav-link active" aria-current="page">paris </a></li>
+        
+        i class="nav-item"><a href="{% url 'creer_paris' %}" class="nav-link active" aria-current="page">créer_paris </a></li>
         {% endif %}
         <li class="nav-item"><a href="{% url 'signup' %}" class="nav-link active" aria-current="page">s'enregistrer </a></li>
         <li class="nav-item"><a href="{% url 'idees_popu' %}" class="nav-link active" aria-current="page">idees_popu </a></li>

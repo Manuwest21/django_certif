@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
-from .models import User, models, Votant, Idee
+from .models import User, models, Votant, Idee, bets_faits
 from django import forms
 from django.forms import ModelForm
 
@@ -21,4 +21,9 @@ class Voter(ModelForm):
 class Idea(ModelForm):
     class Meta:
         model=  Idee
-        fields=['formulation','detail']
+        fields=['formulation','detail','vues_recentes','affection']
+
+class bets(ModelForm):
+    class Meta:
+        model= bets_faits
+        fields= "__all__"
